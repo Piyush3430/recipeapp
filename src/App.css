@@ -1,0 +1,11 @@
+/* Basic styling for the App component */
+.App {
+  text-align: center;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+}

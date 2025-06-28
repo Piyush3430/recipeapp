@@ -1,0 +1,96 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './MyRecipes.css';
+
+const MyRecipes = () => {
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  
+  // Load recipes from local storage when component mounts
+  useEffect(() => {
+    const storedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+    setSavedRecipes(storedRecipes);
+  }, []);
+
+  const [filter, setFilter] = useState('');
+
+  const removeRecipe = (id) => {
+    // Filter out the recipe to be removed
+    const updatedRecipes = savedRecipes.filter(recipe => recipe.id !== id);
+    
+    // Update state
+    setSavedRecipes(updatedRecipes);
+    
+    // Update local storage
+    localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
+  };
+
+  const filteredRecipes = savedRecipes.filter(recipe => 
+    recipe.title.toLowerCase().includes(filter.toLowerCase()) ||
+    recipe.cuisines.some(cuisine => cuisine.toLowerCase().includes(filter.toLowerCase()))
+  );
+
+  return (
+    <div className="my-recipes-page">
+      <div className="page-header">
+        <h1>My Saved Recipes</h1>
+        <p>Manage your collection of favorite recipes</p>
+      </div>
+
+      <div className="filter-container">
+        <input
+          type="text"
+          placeholder="Filter by name or cuisine..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="filter-input"
+        />
+      </div>
+
+      {filteredRecipes.length > 0 ? (
+        <div className="recipe-grid">
+          {filteredRecipes.map((recipe) => (
+            <div key={recipe.id} className="card recipe-card">
+              <div className="card-actions">
+                <button 
+                  className="remove-btn" 
+                  onClick={() => removeRecipe(recipe.id)}
+                  title="Remove from saved recipes"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+              <img src={recipe.image} alt={recipe.title} />
+              <h3>{recipe.title}</h3>
+              <div className="recipe-info">
+                <span><i className="far fa-clock"></i> {recipe.readyInMinutes} mins</span>
+                <span><i className="fas fa-utensils"></i> {recipe.servings} servings</span>
+              </div>
+              <div className="recipe-cuisines">
+                {recipe.cuisines.map((cuisine, index) => (
+                  <span key={index} className="cuisine-tag">{cuisine}</span>
+                ))}
+              </div>
+              <div className="date-added">
+                <i className="far fa-calendar-alt"></i> Saved on {recipe.dateAdded}
+              </div>
+              <Link to={`/recipe/${recipe.id}`} className="btn">
+                View Recipe
+              </Link>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <i className="far fa-bookmark"></i>
+          <h2>No saved recipes yet</h2>
+          <p>Your saved recipes will appear here. Start by exploring recipes and saving your favorites!</p>
+          <Link to="/" className="btn">
+            Find Recipes
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MyRecipes;
