@@ -12,16 +12,22 @@ const MyRecipes = () => {
   }, []);
 
   const [filter, setFilter] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const removeRecipe = (id) => {
-    // Filter out the recipe to be removed
-    const updatedRecipes = savedRecipes.filter(recipe => recipe.id !== id);
-    
-    // Update state
-    setSavedRecipes(updatedRecipes);
-    
-    // Update local storage
-    localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
+    // Show confirmation dialog
+    if (window.confirm('Are you sure you want to remove this recipe from your saved recipes?')) {
+      // Filter out the recipe to be removed
+      const updatedRecipes = savedRecipes.filter(recipe => recipe.id !== id);
+      
+      // Update state
+      setSavedRecipes(updatedRecipes);
+      
+      // Update local storage
+      localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000); // Hide after 3 seconds
+    }
   };
 
   const filteredRecipes = savedRecipes.filter(recipe => 
@@ -35,6 +41,13 @@ const MyRecipes = () => {
         <h1>My Saved Recipes</h1>
         <p>Manage your collection of favorite recipes</p>
       </div>
+
+      {showSuccessMessage && (
+        <div className="success-message">
+          <i className="fas fa-check-circle"></i>
+          Recipe removed successfully!
+        </div>
+      )}
 
       <div className="filter-container">
         <input

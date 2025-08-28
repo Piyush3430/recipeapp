@@ -1,11 +1,33 @@
 /* Basic styling for the App component */
 .App {
   text-align: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: calc(100vh - 70px); /* Account for fixed navbar height */
+  padding-top: 90px; /* Add top padding to prevent content from being hidden behind navbar */
 }
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .App {
-    padding: 10px;
+    padding: 0;
+  }
+  
+  .container {
+    padding: 0 15px;
+    padding-top: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+    padding-top: 90px;
   }
 }

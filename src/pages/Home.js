@@ -47,7 +47,7 @@ const Home = () => {
           {
             id: 3,
             title: 'Beef Tacos',
-            image: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+            image: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80',
             readyInMinutes: 25,
             servings: 4,
             cuisines: ['Mexican'],
@@ -259,84 +259,83 @@ const Home = () => {
     }
   };
 
-  // We no longer need the API key handler since TheMealDB doesn't require an API key
-
   return (
     <div className="home-page">
-      <div className="hero">
-        <h1>Find Your Perfect Recipe</h1>
-        <p>Search thousands of recipes by name, ingredients</p>
-        
-        {/* Ingredient-based search form using TheMealDB API */}
-        <div className="ingredient-search-section">
-          <h2>Find Recipes By Available Ingredients</h2>
-          <form onSubmit={searchByIngredients} className="ingredient-search-form">
-            <div className="ingredients-container">
-              {ingredients.map((ingredient, index) => (
-                <div key={index} className="ingredient-input-group">
-                  <div className="dropdown-container">
-                    <input
-                      type="text"
-                      placeholder={`Ingredient ${index + 1} (e.g., chicken, tomatoes)`}
-                      value={inputValues[index]}
-                      onChange={(e) => handleIngredientInput(index, e.target.value)}
-                      onFocus={() => {
-                        setActiveDropdownIndex(index);
-                        // Show suggestions immediately if there's text
-                        if (inputValues[index].trim() !== '') {
-                          const filtered = commonIngredients.filter(ingredient => 
-                            ingredient.toLowerCase().includes(inputValues[index].toLowerCase())
-                          ).slice(0, 5);
-                          setFilteredIngredients(filtered);
-                        }
-                      }}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      onBlur={() => setTimeout(() => {
-                        setActiveDropdownIndex(null);
-                        setSelectedSuggestionIndex(-1);
-                      }, 200)}
-                      className="ingredient-input"
-                      autoComplete="off"
-                    />
-                    {filteredIngredients.length > 0 && activeDropdownIndex === index && (
-                      <div className="ingredient-dropdown">
-                        {filteredIngredients.map((item, i) => (
-                          <div 
-                            key={i} 
-                            className={`dropdown-item ${i === selectedSuggestionIndex ? 'selected' : ''}`}
-                            onClick={() => selectIngredient(index, item)}
-                          >
-                            {item}
-                          </div>
-                        ))}
-                      </div>
+      <div className="main-content-card">
+        <div className="hero">
+          <h1>Find Your Perfect Recipe</h1>
+          
+          {/* Ingredient-based search form using TheMealDB API */}
+          <div className="ingredient-search-section">
+            <h2>Find Recipes By Available Ingredients</h2>
+            <form onSubmit={searchByIngredients} className="ingredient-search-form">
+              <div className="ingredients-container">
+                {ingredients.map((ingredient, index) => (
+                  <div key={index} className="ingredient-input-group">
+                    <div className="dropdown-container">
+                      <input
+                        type="text"
+                        placeholder={`Ingredient ${index + 1} (e.g., chicken, tomatoes)`}
+                        value={inputValues[index]}
+                        onChange={(e) => handleIngredientInput(index, e.target.value)}
+                        onFocus={() => {
+                          setActiveDropdownIndex(index);
+                          // Show suggestions immediately if there's text
+                          if (inputValues[index].trim() !== '') {
+                            const filtered = commonIngredients.filter(ingredient => 
+                              ingredient.toLowerCase().includes(inputValues[index].toLowerCase())
+                            ).slice(0, 5);
+                            setFilteredIngredients(filtered);
+                          }
+                        }}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onBlur={() => setTimeout(() => {
+                          setActiveDropdownIndex(null);
+                          setSelectedSuggestionIndex(-1);
+                        }, 200)}
+                        className="ingredient-input"
+                        autoComplete="off"
+                      />
+                      {filteredIngredients.length > 0 && activeDropdownIndex === index && (
+                        <div className="ingredient-dropdown">
+                          {filteredIngredients.map((item, i) => (
+                            <div 
+                              key={i} 
+                              className={`dropdown-item ${i === selectedSuggestionIndex ? 'selected' : ''}`}
+                              onClick={() => selectIngredient(index, item)}
+                            >
+                              {item}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {ingredients.length > 1 && (
+                      <button 
+                        type="button" 
+                        onClick={() => removeIngredientField(index)}
+                        className="remove-ingredient-btn"
+                      >
+                        <i className="fas fa-times"></i>
+                      </button>
                     )}
                   </div>
-                  {ingredients.length > 1 && (
-                    <button 
-                      type="button" 
-                      onClick={() => removeIngredientField(index)}
-                      className="remove-ingredient-btn"
-                    >
-                      <i className="fas fa-times">remove item</i>
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button 
-                type="button" 
-                onClick={addIngredientField}
-                className="add-ingredient-btn"
-              >
-                <i className="fas fa-plus"></i> Add Ingredient
+                ))}
+                <button 
+                  type="button" 
+                  onClick={addIngredientField}
+                  className="add-ingredient-btn"
+                >
+                  <i className="fas fa-plus"></i> Add Ingredient
+                </button>
+              </div>
+              
+              <button type="submit" className="ingredient-search-btn">
+                <i className="fas fa-utensils"></i> Find Recipes with Multiple Ingredients
               </button>
-            </div>
-            
-            <button type="submit" className="search-button ingredient-search-btn">
-              <i className="fas fa-utensils"></i> Find Recipes with Multiple Ingredients
-            </button> <br></br>
-            <small className="api-note">Recipes will be sorted by most ingredient matches</small>
-          </form>
+              <small className="api-note">Recipes will be sorted by most ingredient matches</small>
+            </form>
+          </div>
         </div>
       </div>
 
