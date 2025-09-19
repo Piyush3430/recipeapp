@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Test</title>
+</head>
+<body>
+    <h1>Input Test</h1>
+    <form>
+        <div>
+            <label for="title">Recipe Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter recipe title">
+        </div>
+        <div>
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" name="amount" placeholder="Enter amount">
+        </div>
+        <div>
+            <label for="unit">Unit:</label>
+            <input type="text" id="unit" name="unit" placeholder="Enter unit">
+        </div>
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter name">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            console.log('Form submitted:', Object.fromEntries(formData));
+        });
+        
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function(e) {
+                console.log('Input changed:', e.target.name, e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>

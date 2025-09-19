@@ -4,6 +4,8 @@ import './MyRecipes.css';
 
 const MyRecipes = () => {
   const [savedRecipes, setSavedRecipes] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
   // Load recipes from local storage when component mounts
   useEffect(() => {
@@ -11,23 +13,22 @@ const MyRecipes = () => {
     setSavedRecipes(storedRecipes);
   }, []);
 
-  const [filter, setFilter] = useState('');
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
   const removeRecipe = (id) => {
-    // Show confirmation dialog
     if (window.confirm('Are you sure you want to remove this recipe from your saved recipes?')) {
-      // Filter out the recipe to be removed
       const updatedRecipes = savedRecipes.filter(recipe => recipe.id !== id);
-      
-      // Update state
       setSavedRecipes(updatedRecipes);
-      
-      // Update local storage
       localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
       setShowSuccessMessage(true);
-      setTimeout(() => setShowSuccessMessage(false), 3000); // Hide after 3 seconds
+      setTimeout(() => setShowSuccessMessage(false), 3000);
     }
+  };
+
+  // Handle filter input change
+  const handleFilterChange = (e) => {
+    e.preventDefault();
+    const value = e.target.value;
+    console.log('Filter value:', value);
+    setFilter(value);
   };
 
   const filteredRecipes = savedRecipes.filter(recipe => 
@@ -50,13 +51,24 @@ const MyRecipes = () => {
       )}
 
       <div className="filter-container">
-        <input
-          type="text"
-          placeholder="Filter by name or cuisine..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="filter-input"
-        />
+        <div className="filter-section">
+          <label htmlFor="recipe-filter" className="filter-label">Filter Recipes:</label>
+          <input
+            id="recipe-filter"
+            type="text"
+            placeholder="Filter by name or cuisine..."
+            value={filter}
+            onChange={handleFilterChange}
+            onInput={handleFilterChange} // Backup handler
+            className="filter-input"
+            autoComplete="off" // Changed from "on" to "off"
+            spellCheck="false"
+            data-testid="filter-input"
+          />
+          <div className="filter-info">
+            Current filter: "{filter}" | Found {filteredRecipes.length} recipes
+          </div>
+        </div>
       </div>
 
       {filteredRecipes.length > 0 ? (

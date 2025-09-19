@@ -28,10 +28,20 @@ const AddRecipe = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    console.log('Form change:', name, value); // Debug log
+    setFormData(prevData => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
+  };
+
+  // Test function to verify state updates
+  const testTitleUpdate = () => {
+    console.log('Testing title update...');
+    setFormData(prev => ({
+      ...prev,
+      title: 'Test Recipe ' + Date.now()
+    }));
   };
 
   const handleIngredientChange = (index, field, value) => {
@@ -166,6 +176,23 @@ const AddRecipe = () => {
       <div className="page-header">
         <h1>Add New Recipe</h1>
         <p>Share your culinary creations with the world</p>
+        
+        {/* Test input outside of form */}
+        <div style={{ margin: '20px 0', padding: '20px', border: '2px solid white',  }}>
+         
+          {/* <input
+             type="text"
+             placeholder="Test input outside form"
+             onChange={(e) => console.log('Test input changed:', e.target.value)}
+             style={{
+               width: '300px',
+               padding: '10px',
+               border: '1px solid #ccc',
+               borderRadius: '5px',
+               fontSize: '1rem'
+             }}
+          /> */}
+        </div>
       </div>
 
       {submitted ? (
@@ -187,10 +214,69 @@ const AddRecipe = () => {
                   id="title"
                   name="title"
                   value={formData.title}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    console.log('Title input changed:', newValue);
+                    setFormData(prev => ({
+                      ...prev,
+                      title: newValue
+                    }));
+                  }}
+                  onInput={(e) => {
+                    const newValue = e.target.value;
+                    console.log('Title input event:', newValue);
+                    setFormData(prev => ({
+                      ...prev,
+                      title: newValue
+                    }));
+                  }}
+                  onKeyDown={(e) => {
+                    console.log('Key pressed in title:', e.key);
+                  }}
+                  onFocus={(e) => {
+                    console.log('Title input focused');
+                    e.target.select();
+                  }}
+                  onBlur={() => console.log('Title input blurred')}
+                  onClick={() => console.log('Title input clicked')}
                   required
                   placeholder="e.g. Homemade Chocolate Chip Cookies"
+                  autoComplete="off"
+                  spellCheck="false"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    background: '#ffffff',
+                    cursor: 'text',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
                 />
+                <div style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
+                  Current title: "{formData.title}" (Length: {formData.title.length})
+                </div>
+                <div style={{ marginTop: '10px' }}>
+                  <button 
+                    type="button"
+                    onClick={testTitleUpdate}
+                    style={{ 
+                      padding: '8px 16px',
+                      backgroundColor: '#ff6b6b',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Test Title Update
+                  </button>
+                </div>
               </div>
 
               <div className="form-row">

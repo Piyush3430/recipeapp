@@ -23,6 +23,7 @@ const ShoppingList = () => {
 
   const handleNewItemChange = (e) => {
     const { name, value } = e.target;
+    console.log('Shopping list input change:', name, value); // Debug log
     setNewItem({
       ...newItem,
       [name]: value,
@@ -31,6 +32,7 @@ const ShoppingList = () => {
 
   const addItem = (e) => {
     e.preventDefault();
+    console.log('Adding item:', newItem); // Debug log
     if (newItem.name.trim() === '') return;
     
     const newId = items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;

@@ -39,12 +39,15 @@
   outline: none;
   width: 300px;
   transition: border-color 0.3s ease;
-  background: #fafafa;
+  background: #ffffff;
+  cursor: text;
 }
 
 .filter-input:focus {
   border-color: #ff6b6b;
   background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+  transform: scale(1.02);
 }
 
 /* Recipe Grid */
